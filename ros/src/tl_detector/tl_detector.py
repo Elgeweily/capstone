@@ -81,8 +81,8 @@ class TLDetector(object):
         self.camera_image = msg
         light_wp, state = self.process_traffic_lights()
         
-         now = rospy.get_rostime()
-         rospy.loginfo("after return %i %i", now.secs, now.nsecs)
+        now = rospy.get_rostime()
+        rospy.loginfo("after return %i %i", now.secs, now.nsecs)
 
         '''
         Publish upcoming red lights at camera frequency.
@@ -102,8 +102,8 @@ class TLDetector(object):
             self.upcoming_red_light_pub.publish(Int32(self.last_wp))
         self.state_count += 1
         
-         now = rospy.get_rostime()
-         rospy.loginfo("end of image cb %i %i", now.secs, now.nsecs)
+        now = rospy.get_rostime()
+        rospy.loginfo("end of image cb %i %i", now.secs, now.nsecs)
 
     def get_closest_waypoint(self, x, y):
         """Identifies the closest path waypoint to the given position
