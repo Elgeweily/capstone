@@ -73,9 +73,16 @@ class TLDetector(object):
         Args:
             msg (Image): image from car-mounted camera
         """ 
+        
+        now = rospy.get_rostime()
+        rospy.loginfo("new image %i %i", now.secs, now.nsecs)
+        
         self.has_image = True
         self.camera_image = msg
         light_wp, state = self.process_traffic_lights()
+        
+         now = rospy.get_rostime()
+         rospy.loginfo("after return %i %i", now.secs, now.nsecs)
 
         '''
         Publish upcoming red lights at camera frequency.
@@ -94,6 +101,9 @@ class TLDetector(object):
         else:
             self.upcoming_red_light_pub.publish(Int32(self.last_wp))
         self.state_count += 1
+        
+         now = rospy.get_rostime()
+         rospy.loginfo("end of image cb %i %i", now.secs, now.nsecs)
 
     def get_closest_waypoint(self, x, y):
         """Identifies the closest path waypoint to the given position
@@ -139,7 +149,7 @@ class TLDetector(object):
         # List of positions that correspond to the line to stop in front of for a given intersection
         
         now = rospy.get_rostime()
-        rospy.loginfo("start time %i %i", now.secs, now.nsecs)
+        rospy.loginfo("start of process tl method %i %i", now.secs, now.nsecs)
         
         stop_line_positions = self.config['stop_line_positions']
         
