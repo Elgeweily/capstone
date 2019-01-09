@@ -7,7 +7,6 @@ from styx_msgs.msg import Lane
 from sensor_msgs.msg import Image
 from cv_bridge import CvBridge
 from light_classification.tl_classifier import TLClassifier
-import tensorflow as tflow
 import tf
 import cv2
 import yaml
@@ -34,25 +33,7 @@ class TLDetector(object):
         except KeyError:
             #No param - styx.launch
             model_name = MODEL_NAME_SIMU
-        
-	    
-        self.model_path = model_name + '/frozen_inference_graph.pb'
 
-	    #PATH_TO_LABELS = 'light_classification/training_setup/object-detection.pbtxt'
-
-        # Build the model
-        self.detection_graph = tflow.Graph()
-        # create config
-        config = tflow.ConfigProto()
-
-        # Create the graph
-        with self.detection_graph.as_default():
-            self.graph_def = tflow.GraphDef()
-            with tflow.gfile.GFile(self.model_path, 'rb') as fid:
-                serialized_graph = fid.read()
-                self.graph_def.ParseFromString(serialized_graph)
-                tflow.import_graph_def(self.graph_def, name='')
-                rospy.loginfo('Loaded frozen tensorflow model: %s', self.model_path)
 
             # Create a reusable sesion attribute
             # self.sess = tflow.Session(graph=self.detection_graph, config=config)
