@@ -25,6 +25,8 @@ class TLDetector(object):
         self.waypoint_tree = None
         self.camera_image = None
         self.lights = []
+        
+        dummy = None
 
         sub1 = rospy.Subscriber('/current_pose', PoseStamped, self.pose_cb)
         sub2 = rospy.Subscriber('/base_waypoints', Lane, self.waypoints_cb)
@@ -146,6 +148,11 @@ class TLDetector(object):
         for i, light in enumerate(self.lights):
             # Get stop line waypoint index
             line = stop_line_positions[i]
+            
+            if not dummy:
+                print(line)
+                dummy = 1
+                
             temp_wp_idx = self.get_closest_waypoint(line[0], line[1])
             d = temp_wp_idx - car_wp_idx 
             if d >= 0 and d < VISIBLE_RANGE:
