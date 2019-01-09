@@ -14,7 +14,6 @@ from scipy.spatial import KDTree
 
 STATE_COUNT_THRESHOLD = 3
 VISIBLE_RANGE = 200 # need to be small enough to include only one (or none) traffic light at a time
-dummy = None
 
 class TLDetector(object):
     def __init__(self):
@@ -26,6 +25,8 @@ class TLDetector(object):
         self.waypoint_tree = None
         self.camera_image = None
         self.lights = []
+        
+        self.dummy = None
 
         sub1 = rospy.Subscriber('/current_pose', PoseStamped, self.pose_cb)
         sub2 = rospy.Subscriber('/base_waypoints', Lane, self.waypoints_cb)
@@ -148,9 +149,9 @@ class TLDetector(object):
             # Get stop line waypoint index
             line = stop_line_positions[i]
             
-            if not dummy:
+            if not self.dummy:
                 print(line)
-                dummy = 1
+                self.dummy = 1
                 
             temp_wp_idx = self.get_closest_waypoint(line[0], line[1])
             d = temp_wp_idx - car_wp_idx 
