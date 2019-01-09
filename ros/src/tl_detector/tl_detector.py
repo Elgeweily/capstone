@@ -74,15 +74,11 @@ class TLDetector(object):
             msg (Image): image from car-mounted camera
         """ 
         
-        now = rospy.get_rostime()
-        rospy.loginfo("new image %i %i", now.secs, now.nsecs)
+        rospy.loginfo("new image")
         
         self.has_image = True
         self.camera_image = msg
         light_wp, state = self.process_traffic_lights()
-        
-        now = rospy.get_rostime()
-        rospy.loginfo("after return %i %i", now.secs, now.nsecs)
 
         '''
         Publish upcoming red lights at camera frequency.
@@ -102,8 +98,7 @@ class TLDetector(object):
             self.upcoming_red_light_pub.publish(Int32(self.last_wp))
         self.state_count += 1
         
-        now = rospy.get_rostime()
-        rospy.loginfo("end of image cb %i %i", now.secs, now.nsecs)
+        rospy.loginfo("end of image cb")
 
     def get_closest_waypoint(self, x, y):
         """Identifies the closest path waypoint to the given position
@@ -146,52 +141,21 @@ class TLDetector(object):
         closest_light = None
         line_wp_idx = None
 
-        # List of positions that correspond to the line to stop in front of for a given intersection
-        
-        now = rospy.get_rostime()
-        rospy.loginfo("start of process tl method %i %i", now.secs, now.nsecs)
-        
-        stop_line_positions = self.config['stop_line_positions']
-        
-        now = rospy.get_rostime()
-        rospy.loginfo("config file dict read %i %i", now.secs, now.nsecs)
-        
+        # List of positions that correspond to the line to stop in front of for a given intersection  
+        stop_line_positions = self.config['stop_line_positions']        
         if(self.pose):
             car_wp_idx = self.get_closest_waypoint(self.pose.pose.position.x, self.pose.pose.position.y)
-            
-        now = rospy.get_rostime()
-        rospy.loginfo("get closest car wp %i %i", now.secs, now.nsecs)
-
         #TODO find the closest visible traffic light (if one exists)
         # diff = len(self.waypoints.waypoints)
         for i, light in enumerate(self.lights):
-            now = rospy.get_rostime()
-            rospy.loginfo("new loop iteration %i %i", now.secs, now.nsecs)
-            
             # Get stop line waypoint index
             line = stop_line_positions[i]
-            
-            now = rospy.get_rostime()
-            rospy.loginfo("stop line position %i %i", now.secs, now.nsecs)
-                
             temp_wp_idx = self.get_closest_waypoint(line[0], line[1])
-            
-            now = rospy.get_rostime()
-            rospy.loginfo("get closest stop line wp %i %i", now.secs, now.nsecs)
-            
             d = temp_wp_idx - car_wp_idx 
             if d >= 0 and d < VISIBLE_RANGE:
                 closest_light = light
                 line_wp_idx = temp_wp_idx
-                
-                now = rospy.get_rostime()
-                rospy.loginfo("before get light state %i %i", now.secs, now.nsecs)
-                
                 state = self.get_light_state(closest_light)
-                
-                now = rospy.get_rostime()
-                rospy.loginfo("after get light state %i %i", now.secs, now.nsecs)
-                
                 return line_wp_idx, state
                 
             # # Find closest stop line waypoint index
