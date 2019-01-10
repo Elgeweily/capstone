@@ -72,7 +72,6 @@ class TLDetector(object):
             of the waypoint closest to the red light's stop line to /traffic_waypoint
         Args:
             msg (Image): image from car-mounted camera
-        """ 
         
         rospy.loginfo("new image")
         
@@ -101,6 +100,7 @@ class TLDetector(object):
         self.state_count += 1
         
         rospy.loginfo("end of image cb")
+        """ 
 
     def get_closest_waypoint(self, x, y):
         """Identifies the closest path waypoint to the given position
