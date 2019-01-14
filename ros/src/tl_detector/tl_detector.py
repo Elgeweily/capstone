@@ -73,8 +73,6 @@ class TLDetector(object):
         Args:
             msg (Image): image from car-mounted camera
         """ 
-        rospy.loginfo("new image")
-        
         self.has_image = True
         self.camera_image = msg
         
@@ -97,8 +95,6 @@ class TLDetector(object):
         else:
             self.upcoming_red_light_pub.publish(Int32(self.last_wp))
         self.state_count += 1
-        
-        rospy.loginfo("end of image cb")
 
     def get_closest_waypoint(self, x, y):
         """Identifies the closest path waypoint to the given position
